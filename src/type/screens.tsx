@@ -6,7 +6,7 @@ export interface ITabScreen {
 	name: string,
 	component: any,
 	options?: BottomTabNavigationOptions,
-	Icon: {
+	Icon?: {
 		Provider: any,
 		name: string
 	}

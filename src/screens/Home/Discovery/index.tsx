@@ -1,5 +1,5 @@
-import { Pressable, StyleSheet } from 'react-native';
-import React, { useState } from 'react';
+import { Pressable, SafeAreaView, StyleSheet } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   TextInput,
@@ -15,6 +15,9 @@ import {
 import consumet from '@consumet/extensions';
 import Filter from './Filter';
 import Hero from './Hero';
+import Body from './Body';
+import { IAnilistAnimeInfo } from 'src/type/animeResponse';
+import animeApi from '../../../api/anime';
 
 const Index = ({
   navigation,
@@ -24,11 +27,25 @@ const Index = ({
   router: RouteProp<ParamListBase>;
 }) => {
   const [searchText, setSearchText] = useState<string>();
+  const [heroAnime, setHeroAnime] = useState<IAnilistAnimeInfo>();
+  const [trendingAnime, setTrendingAnime] = useState<IAnilistAnimeInfo[]>();
+  const [popularAnime, setPopularAnime] = useState<IAnilistAnimeInfo[]>();
+
+  useEffect(() => {
+    animeApi
+      .getPopularAnime()
+      .then(({ data }) => setPopularAnime(data.results));
+    animeApi
+      .getTrendingAnime()
+      .then(({ data }) => setTrendingAnime(data.results));
+  }, []);
 
   return (
     <ScrollPageView style={styles.container}>
-      <Hero />
-      <Filter />
+      <SafeAreaView>
+        <Hero />
+        <Body Trending={trendingAnime} Popular={popularAnime} />
+      </SafeAreaView>
     </ScrollPageView>
   );
 };

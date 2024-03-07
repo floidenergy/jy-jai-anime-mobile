@@ -1,27 +1,66 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-import React from 'react';
-import consumet from '@consumet/extensions';
-import { Text, PageView } from '../../component/basic';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import StackNavigation from './navigationStack';
-import { API_URL } from '@env';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { NavigationContainer } from '@react-navigation/native';
+import { PropsWithChildren } from 'react';
+import Discovery from './Discovery';
+import Search from './Search';
 
-const Stack = createNativeStackNavigator();
-const Home = () => {
+import TabNavigation from './Navigation';
+import { ITabScreen } from '../../type/screens';
+import { StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import useTheme from '../../hooks/useTheme';
+
+const Tab = createBottomTabNavigator();
+
+export default function Navigation() {
+  const theme = useTheme();
   return (
-    <Stack.Navigator>
-      {StackNavigation.map((stack, index) => (
-        <Stack.Screen key={index} {...stack} />
-      ))}
-    </Stack.Navigator>
+    <>
+      <Tab.Navigator
+        initialRouteName="Home"
+        screenOptions={{
+          tabBarShowLabel: false,
+          headerShown: false,
+          tabBarStyle: {
+            position: 'fixed',
+            bottom: 0,
+            right: 0,
+            left: 0,
+            elevation: 0,
+            height: 60,
+            backgroundColor: theme.theme.colors.bg.primary,
+          } as any,
+        }}>
+        {TabNavigation.map((tab: ITabScreen, index: number) => (
+          <Tab.Screen
+            key={index}
+            name={tab.name}
+            component={tab.component}
+            options={{
+              // ...tab.options,
+              tabBarIcon: ({ focused }) => (
+                <View>
+                  {tab.Icon && (
+                    <tab.Icon.Provider
+                      name={tab.Icon!.name}
+                      size={26}
+                      style={{
+                        color: focused
+                          ? theme.theme.colors.bg.secondary
+                          : theme.theme.colors.bg.inverted,
+                      }}
+                    />
+                  )}
+                </View>
+              ),
+            }}
+          />
+        ))}
+      </Tab.Navigator>
+    </>
   );
-};
-
-export default Home;
+}
 
 const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    height: '100%',
-  },
+  tabContainer: {},
 });

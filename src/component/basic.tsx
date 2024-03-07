@@ -20,7 +20,7 @@ interface ITextProps extends TextProps {
   fontSize?: number;
 }
 
-export const Text = ({ children, style, ...props }: ITextProps) => {
+export const Text = ({ children, style,  ...props }: ITextProps) => {
   const { theme } = useTheme();
   return (
     <RNText style={[{ color: theme.colors.text.primary }, style]} {...props}>
@@ -30,7 +30,7 @@ export const Text = ({ children, style, ...props }: ITextProps) => {
 };
 
 export const PageView = ({ children, style,...props }: ViewProps) => {
-  const { theme } = useTheme();
+  const { theme } = useTheme();  
   return (
     <View_
       style={[{ backgroundColor: theme.colors.bg.primary, height: '100%' }, style]}
